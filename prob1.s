@@ -10,9 +10,9 @@
 # int a0, a1, countPrimos=0, divisores=0;
 # for(int i=a0; i<=a1; i++){
 #   divisores = 0;
-//   if (i <= 1) divisores = -1;
+#   if (i <= 1) divisores = -1;
 #   for(int j=2; j<=i/2 ; j++) if(i%j == 0) divisores++;
-//   if (divisores == 0) countPrimos++;
+#   if (divisores == 0) countPrimos++;
 # }
 # Como queremos aquantidade de primos de um intervalo, ha um for que percorre o intervalo e 
 # verifica para cada numero do intervalo se o mesmo eh primo contabilizando na variavel countPrimos.
@@ -25,7 +25,7 @@ vetor: .word 0 0 0 0
 .text
 main:
 add s0, zero, zero
-#Teste 1
+# Teste 1
 addi a0, zero, 5
 addi a1, zero, 7
 la a2, vetor
@@ -33,8 +33,8 @@ jal ra, primos
 addi t0, zero, 2
 beq t0, a0, OK1
 beq zero, zero, T2
-OK1: addi s0, s0, 1 #Teste ok, passou
-#Teste 2
+OK1: addi s0, s0, 1 # Teste ok, passou
+# Teste 2
 T2: addi a0, zero, 1
 addi a1, zero, 6
 la a2, vetor
@@ -42,12 +42,12 @@ jal ra, primos
 addi t0, zero, 3
 beq t0, a0, OK2
 beq zero, zero, FIM
-OK2: addi s0, s0, 1 #Teste ok, passou
+OK2: addi s0, s0, 1 # Teste ok, passou
 beq zero, zero, FIM
 ##### START PROCEDIMENTO PRIMO #####
 primos:
-addi t0, zero, 2
-addi t1, a0, -1 # i=(a0 - 1) -> LOOP1 sempre faz i++ no inicio, entao na primeira rodada i = a0
+addi t0, zero, 2 # const 2
+addi t1, a0, -1 # i = (a0 - 1) -> LOOP1 sempre faz i++ no inicio, entao na primeira rodada i = a0
 add a0, zero, zero # numPrimos - numero de primos do intervalo, inicialmente 0
 LOOP1:
 addi t1, t1, 1 # i++
@@ -62,12 +62,15 @@ bne t4, zero, SEGUE_L2 # mod (t4) != 0? entao j nao eh divisor de i
 COUNT_DIVISORES: addi t3, t3, 1
 SEGUE_L2:
 div t5, t1, t0 # t5 = i / 2
-bge t5, t2, LOOP2  # j <= i/2
+bge t5, t2, LOOP2  # j <= i / 2
 bne t3, zero, SEGUE_L1 # divisores (t3) != 0? entao nao eh primo
-COUNT_PRIMOS: addi a0, a0, 1
+COUNT_PRIMOS: 
+addi a0, a0, 1
+sb t1, 0(a2) # adiciona numero primo (i) ao vetor
+addi a2, a2, 4 # incrementa posicao do vetor
 SEGUE_L1:
 blt t1, a1, LOOP1  # i < a1 - roda o for para proximo numero do intervalo  
 jalr zero, 0(ra)
 ##### END PROCEDIMENTO PRIMO #####
 FIM: add zero, zero, zero
-#Final da execucao, s0 deve ter o valor igual a 2.
+# Final da execucao, s0 deve ter o valor igual a 2.
