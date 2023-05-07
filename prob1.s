@@ -1,4 +1,5 @@
 ##### Problema 1: Numeros primos #####
+#
 # Procedimento que calcula os numeros primos em uma determinada faixa.
 # Numero primo: numero natural n, n > 1, que possui apenas dois divisores distintos (1 e ele mesmo). 
 # Para identificar, podemos verificar o resto da divisao (mod - %) do numero por seus predecessores. 
@@ -7,13 +8,13 @@
 # o numero de divisores a partir de 2 ate a metade do numero em questao: se for 0, o numero eh primo.
 # A seguir eh apresentado o codigo em alto nivel (c++) implementando essa logica, e que sera
 # traduzido para risc-v:
-# int a0, a1, countPrimos=0, divisores=0;
-# for(int i=a0; i<=a1; i++){
-#   divisores = 0;
-#   if (i <= 1) divisores = -1;
-#   for(int j=2; j<=i/2 ; j++) if(i%j == 0) divisores++;
-#   if (divisores == 0) countPrimos++;
-# }
+## int a0, a1, countPrimos=0, divisores=0;
+## for(int i=a0; i<=a1; i++){
+##   divisores = 0;
+##   if (i <= 1) divisores = -1;
+##   for(int j=2; j<=i/2 ; j++) if(i%j == 0) divisores++;
+##   if (divisores == 0) countPrimos++;
+## }
 # Como queremos aquantidade de primos de um intervalo, ha um for que percorre o intervalo e 
 # verifica para cada numero do intervalo se o mesmo eh primo contabilizando na variavel countPrimos.
 # Alem disso, como a0 e a1 pode ser qualquer inteiro e nao existem numeros primos menores ou iguais 
@@ -57,7 +58,7 @@ addi t2, zero, 1 # j=1 -> LOOP2 sempre faz j++ no inicio, entao na primeira roda
 LOOP2: 
 addi t2, t2, 1 # j++
 beq t1, t0, COUNT_PRIMOS # i == 2? segue para incrementar numPrimos (a0)
-rem t4, t1, t2 # t4 = i%j
+rem t4, t1, t2 # t4 = i % j
 bne t4, zero, SEGUE_L2 # mod (t4) != 0? entao j nao eh divisor de i
 COUNT_DIVISORES: addi t3, t3, 1
 SEGUE_L2:
