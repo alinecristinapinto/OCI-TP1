@@ -47,30 +47,50 @@ OK2: addi s0, s0, 1 # Teste ok, passou
 beq zero, zero, FIM
 ##### START PROCEDIMENTO PRIMO #####
 primos:
-addi t0, zero, 2 # const 2
-addi t1, a0, -1 # i = (a0 - 1) -> LOOP1 sempre faz i++ no inicio, entao na primeira rodada i = a0
-add a0, zero, zero # numPrimos - numero de primos do intervalo, inicialmente 0
-LOOP1:
-addi t1, t1, 1 # i++
-add t3, zero, zero # divisores = 0 - armazena numero de divisores de i (t1)
-blt t1, t0, LOOP1  # i < 2? se sim: segue para proximo numero  
-addi t2, zero, 1 # j=1 -> LOOP2 sempre faz j++ no inicio, entao na primeira rodada j = 2
-LOOP2: 
-addi t2, t2, 1 # j++
-beq t1, t0, COUNT_PRIMOS # i == 2? segue para incrementar numPrimos (a0)
-rem t4, t1, t2 # t4 = i % j
-bne t4, zero, SEGUE_L2 # mod (t4) != 0? entao j nao eh divisor de i
-COUNT_DIVISORES: addi t3, t3, 1
-SEGUE_L2:
-div t5, t1, t0 # t5 = i / 2
-bge t5, t2, LOOP2  # j <= i / 2
-bne t3, zero, SEGUE_L1 # divisores (t3) != 0? entao nao eh primo
-COUNT_PRIMOS: 
-addi a0, a0, 1
-sb t1, 0(a2) # adiciona numero primo (i) ao vetor
-addi a2, a2, 4 # incrementa posicao do vetor
-SEGUE_L1:
-blt t1, a1, LOOP1  # i < a1 - roda o for para proximo numero do intervalo  
+	addi sp, sp, -20
+	sw s0, 0(sp)
+	sw s1, 4(sp)
+	sw s2, 8(sp)
+	sw s3, 12(sp)
+	sw ra, 16(sp)
+    
+	addi t2, zero, 2 # const 2
+	addi s0, a0, -1 # i = (a0 - 1) -> LOOP1 sempre faz i++ no inicio, entao na primeira rodada i = a0
+	add a0, zero, zero # numPrimos - numero de primos do intervalo, inicialmente 0
+    
+	LOOP1:
+		addi s0, s0, 1 # i++
+		add s1, zero, zero # divisores = 0 - armazena numero de divisores de i (s0)
+        
+		blt s0, t2, LOOP1  # i < 2? se sim: segue para proximo numero  
+
+		addi s2, zero, 1 # j=1 -> LOOP2 sempre faz j++ no inicio, entao na primeira execucao j = 2
+		LOOP2: 
+			addi s2, s2, 1 # j++
+            
+			beq s0, t2, COUNT_PRIMOS # i == 2? segue para incrementar numPrimos (a0)
+            
+			rem s3, s0, s2 # s3 = i % j
+            
+			bne s3, zero, SEGUE_L2 # mod (s3) != 0? entao j nao eh divisor de i
+			COUNT_DIVISORES: addi s1, s1, 1
+			SEGUE_L2: div t5, s0, t2 # t5 = i / 2
+		bge t5, s2, LOOP2  # j <= i / 2
+        
+		bne s1, zero, SEGUE_L1 # divisores (s1) != 0? entao nao eh primo
+		COUNT_PRIMOS: 
+			addi a0, a0, 1
+			sb s0, 0(a2) # adiciona numero primo (i) ao vetor
+			addi a2, a2, 4 # incrementa posicao do vetor
+		SEGUE_L1:
+	blt s0, a1, LOOP1  # i < a1 - roda o for para proximo numero do intervalo  
+
+	lw s0, 0(sp)
+	lw s1, 4(sp)
+	lw s2, 8(sp)
+	lw s3, 12(sp)
+	lw ra, 16(sp)
+	addi sp, sp, 20
 jalr zero, 0(ra)
 ##### END PROCEDIMENTO PRIMO #####
 FIM: add zero, zero, zero
